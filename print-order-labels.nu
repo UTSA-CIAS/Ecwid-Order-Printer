@@ -1,5 +1,5 @@
 #!/usr/bin/env nu
-print "Running Ecwid order label-printing script."
+print $"Running Ecwid order label-printing script, in ($env.pwd)"
 
 const base_url = "https://app.ecwid.com/api/v3/96539012/"
 let headers = {Authorization: $"Bearer ($env.access_token)"}
@@ -9,6 +9,7 @@ const order_dir = "orders"
 mkdir -v $order_dir
 
 def ecwid_fetch [path] {
+  print $'($base_url)($path)'
   http get $'($base_url)($path)' --headers $headers
 }
 
