@@ -1,4 +1,5 @@
 #!/usr/bin/env nu
+print "Running Ecwid order label-printing script."
 
 const base_url = "https://app.ecwid.com/api/v3/96539012/"
 let headers = {Authorization: $"Bearer ($env.access_token)"}
@@ -55,4 +56,6 @@ def process_new_label [id] {
 
 def main [] {
   ready_orders | par-each { process_new_label $in.id }
+
+  print "Script complete."
 }
