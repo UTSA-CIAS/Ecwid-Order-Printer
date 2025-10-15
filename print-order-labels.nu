@@ -54,8 +54,7 @@ def process_new_label [id] {
 }
 
 
-def main [] {
-  ready_orders | par-each { process_new_label $in.id }
 
-  print "Script complete."
-}
+ready_orders | par-each { process_new_label $in.id }
+
+print "Script complete."
