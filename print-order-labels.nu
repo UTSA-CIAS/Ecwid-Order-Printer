@@ -33,6 +33,7 @@ def fetch_orders [search] {
 
 let ready_to_print = { 
     fulfillmentStatus:"PROCESSING,AWAITING_PROCESSING"
+    , paymentStatus:"PAID,CUSTOM_PAYMENT_STATUS_1,CUSTOM_PAYMENT_STATUS_2,CUSTOM_PAYMENT_STATUS_3"
     , containsPreorderItems:"false"
     , responseFields: "items(id,email,total)"
     }
