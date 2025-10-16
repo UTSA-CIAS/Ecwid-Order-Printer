@@ -1,4 +1,7 @@
 #!/usr/bin/env nu
+
+source .env
+
 print $"Running Ecwid order label-printing script, in ($env.pwd)"
 
 const base_url = "https://app.ecwid.com/api/v3/96539012/"
@@ -14,7 +17,7 @@ def ecwid_fetch [path] {
 }
 
 def save_pdf [id] {
-    http get $'($base_url)orders/($id)/invoice-pdf' --headers $headers out> $"./($order_dir)/($id).pdf"
+    http get $'($base_url)orders/($id)/invoice-pdf' --headers $headers out> $"($order_dir)/($id).pdf"
 }
 
 
@@ -41,21 +44,27 @@ def ready_orders [] {
 
 
 def process_new_label [id] {
+    cd $order_dir
+
     let filename = $"($id).pdf"
 
-    let exists = (ls $"($order_dir)" | where name == $"($order_dir)/($filename)" | is-not-empty)
+    let exists = (ls | where name == $"($filename)" | is-not-empty)
+
+    cd ..
 
     if $exists {
         print $"Already have ($id).pdf"
     } else {
         save_pdf $id
         print $"Saved ($id).pdf. Printing!"
-        #^print $"($order_dir)/($filename)"
+        PDFtoPrinter.exe /s $"($order_dir)/($filename)"
     }
+
+    
 }
 
 
 
-ready_orders | par-each { process_new_label $in.id }
+ready_orders | each { process_new_label $in.id }
 
 print "Script complete."
